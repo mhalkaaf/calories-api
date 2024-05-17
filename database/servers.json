@@ -1,0 +1,15 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "calories-database",
+            "Group": "Servers",
+            "Host": "database",
+            "Port": 5432,
+            "MaintenanceDB": "postgres",
+            "Username": "postgres",
+            "PassFile": "/pgpass",
+            "SSLMode": "prefer"
+        }
+    }
+  }
+  
