@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  api:
+    build:
+      context: ./app
+    ports:
+      - "9000:9000"
+
+  webserver:
+    restart: always
+    build:
+      context: ./webserver
+    ports:
+      - "80:80"
+
+  database:
+    image: postgres:15-alpine3.19
+    restart: always
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/user
+      POSTGRES_PASSWORD_FILE: /run/secrets/pass
+      POSTGRES_DB_FILE: /run/secrets/db
+    secrets:
+      - user
+      - pass
+      - db
+    volumes:
+    - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+secrets:
+  user:
+    file: ./database/user.txt
+  pass:
+    file: ./database/password.txt
+  db: 
+    file: ./database/dbname.txt
+
+volumes:
+  pgdata:
