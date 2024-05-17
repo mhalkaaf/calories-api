@@ -29,6 +29,15 @@ services:
     - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'haeckal@bangkit.com'
+      PGADMIN_DEFAULT_PASSWORD: 'testing'
+    ports:
+      - 8000:80
+    volumes:
+      - ./database/servers.json:/pgadmin4/servers.json
 
 secrets:
   user:

@@ -1,6 +1,10 @@
 const { nanoid } = require("nanoid");
 const books = require("./books");
 
+// Homepage
+const homepageHandler = (request, h) => {
+  return 'It Works'
+};
 
 // Add new Book
 const addBookHandler = (request, h) => {
@@ -212,6 +216,7 @@ const deleteBookByIdHandler = (request, h) => {
 };
 
 module.exports = { 
+    homepageHandler,
     addBookHandler, 
     getAllBooksHandler, 
     getBookByIdHandler,
