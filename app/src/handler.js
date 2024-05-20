@@ -1,225 +1,94 @@
-const { nanoid } = require("nanoid");
-const books = require("./books");
+const pool = require('./db');
+const queries = require('./queries');
 
-// Homepage
-const homepageHandler = (request, h) => {
-  return 'It Works'
-};
-
-// Add new Book
-const addBookHandler = (request, h) => {
-    const { name, year, author, summary, publisher, pageCount, readPage, reading, } = request.payload;
-
-    if (name === undefined) {
-        const response = h.response({
-            status: 'fail',
-            message: 'Gagal menambahkan buku. Mohon isi nama buku',
-        });
-
-        response.code(400);
-        return response;
-    }
-
-    if (readPage > pageCount) {
-        const response = h.response({
-            status: 'fail',
-            message: 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount',
-        });
-
-        response.code(400);
-        return response;
-    }
-
-    const id = nanoid(16);
-    const insertedAt = new Date().toISOString();
-    const updatedAt = insertedAt;
-    const finished = pageCount === readPage;
-
-    const newBook = {
-        id,
-        name, 
-        year, 
-        author, 
-        summary, 
-        publisher, 
-        pageCount, 
-        readPage, 
-        finished,
-        reading,
-        insertedAt,
-        updatedAt,
-    };
-
-    books.push(newBook);
-
-    const isSuccess = books.filter((book) => book.id === id).length > 0;
-
-    if (isSuccess) {
-        const response = h.response({
-            status: 'success',
-            message: 'Buku berhasil ditambahkan',
-            data: {
-                bookId: id,
-            },
-        });
-
-        response.code(201);
-        return response;
-    }
-
-    const response = h.response({
-        status: 'fail',
-        message: 'Buku gagal ditambahkan',
+const getUser = (req, res) => {
+    pool.query(queries.getUser, (error, results) => {
+        if (error) throw error;
+        res.status(200).json(results.rows);
     });
-
-    response.code(500);
-    return response;
 };
 
-// Get All Books
-const getAllBooksHandler = (request, h) => {
-    const { name, reading, finished } = request.query;
+const getUserById = (req, res) => {
 
-    let filteredBooks = books;
+    const id = parseInt(req.params.id);
 
-    if (name !== undefined) {
-      filteredBooks = filteredBooks.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
-    }
-    if (reading !== undefined) {
-      filteredBooks = filteredBooks.filter((book) => book.reading === !!parseInt(reading));
-    }
-    if (finished !== undefined) {
-      filteredBooks = filteredBooks.filter((book) => book.finished === !!parseInt(finished));
-    }
-
-    const response = h.response({
-      status: 'success',
-      data: {
-        books: filteredBooks.map((book) => ({
-          id: book.id,
-          name: book.name,
-          publisher: book.publisher,
-        })),
-      },
+    pool.query(queries.getUserById, [id], (error, results) => {
+        if (error) throw error;
+        res.status(200).json(results.rows);
     });
-    response.code(200);
-    return response;
 };
 
-// Get book
-const getBookByIdHandler = (request, h) => {
-    const { id } = request.params;
+const addUser = (req, res) => {
 
-    const book = books.filter((n) => n.id === id)[0];
+    const { name, email, password } = req.body;
 
-    if (book !== undefined) {
-        return {
-            status: 'success',
-            data: {
-                book,
-            },
-        };
-    }
-
-    const response = h.response({
-        status: 'fail',
-        message: 'Buku tidak ditemukan',
-    });
-
-    response.code(404);
-    return response;
-};
-
-// Edit books by ID
-const editBookByIdHandler = (request, h) => {
-    const { id } = request.params;
-
-    const { name, year, author, summary, publisher, pageCount, readPage, reading, } = request.payload;
-
-    const updatedAt = new Date().toISOString();
-    const index = books.findIndex((book) => book.id === id);
-
-    if (index !== -1) {
-        if (name === undefined) {
-          const response = h.response({
-            status: 'fail',
-            message: 'Gagal memperbarui buku. Mohon isi nama buku',
-          });
-          response.code(400);
-          return response;
+    // check if emails is already exist
+    pool.query(queries.checkEmailExists, [email], (error, results) => {
+        if (error) {
+            console.error("Error executing query", error.stack);
+            return res.status(500).send("Internal server error");
         }
-        if (pageCount < readPage) {
-          const response = h.response({
-            status: 'fail',
-            message: 'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount',
-          });
-          response.code(400);
-          return response;
+        if (results.rows.length) {
+            return res.status(400).send("Email already exists.");
         }
 
-        const finished = (pageCount === readPage);
-        books[index] = {
-          ...books[index],
-          name,
-          year,
-          author,
-          summary,
-          publisher,
-          pageCount,
-          readPage,
-          finished,
-          reading,
-          updatedAt: new Date().toISOString(),
-        };
-
-        const response = h.response({
-          status: 'success',
-          message: 'Buku berhasil diperbarui',
+        // add student to database
+        pool.query(queries.addUser, [name, email, password], (error, results) => {
+            if (error) {
+                console.error("Error executing query", error.stack);
+                return res.status(500).send("Internal server error");
+            }
+            return res.status(200).send("Student added successfully");
         });
-
-        response.code(200);
-        return response;
-      }
-
-      const response = h.response({
-        status: 'fail',
-        message: 'Gagal memperbarui buku. Id tidak ditemukan',
-      });
-      
-      response.code(404);
-      return response;
-};
-
-// Edit book by ID
-const deleteBookByIdHandler = (request, h) => {
-    const { id } = request.params;
-
-    const index = books.findIndex((book) => book.id === id);
-
-    if (index !== -1) {
-        books.splice(index, 1);
-        const response = h.response({
-        status: 'success',
-        message: 'Buku berhasil dihapus',
-        });
-        response.code(200);
-        return response;
-    }
-
-    const response = h.response({
-        status: 'fail',
-        message: 'Buku gagal dihapus. Id tidak ditemukan',
     });
 
-    response.code(404);
-    return response;
+    
 };
 
-module.exports = { 
-    homepageHandler,
-    addBookHandler, 
-    getAllBooksHandler, 
-    getBookByIdHandler,
-    editBookByIdHandler,
-    deleteBookByIdHandler
+const deleteUser = (req, res) =>  {
+    const id = parseInt(req.params.id);
+
+    pool.query(queries.getUserById, [id], (error, results) => {
+        const noUserFound = !results.rows.length;
+        if (noUserFound) {
+            res.send("User does not exist in database");
+        };
+        
+        pool.query(queries.deleteUser, [id], (error, results) => {
+            if (error) {
+                console.error("Error executing query", error.stack);
+                return res.status(500).send("Internal server error");
+            }
+            return res.status(200).send("Student delete successfully");
+        });
+    });
+};
+
+const updateUser = (req, res) => {
+    const id = parseInt(req.params.id)
+    const { name } = req.body
+
+    pool.query(queries.getUserById, [id], (error, results) => {
+        const noUserFound = !results.rows.length;
+        if (noUserFound) {
+            res.send("Student does not exist in database");
+        };
+
+        pool.query(queries.updateUser, [name, id], (error, results) => {
+            if (error) {
+                console.error("Error executing query", error.stack);
+                return res.status(500).send("Internal server error");
+            }
+            return res.status(200).send("Updated successfully")
+        });
+    });
+        
+};
+
+module.exports = {
+    getUser,
+    getUserById,
+    addUser,
+    deleteUser,
+    updateUser
 };
