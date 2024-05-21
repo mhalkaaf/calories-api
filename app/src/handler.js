@@ -1,5 +1,5 @@
-const pool = require('./db');
-const queries = require('./queries');
+import { pool } from './db.js';
+import * as queries from './queries.js';
 
 const getUser = (req, res) => {
     pool.query(queries.getUser, (error, results) => {
@@ -20,7 +20,7 @@ const getUserById = (req, res) => {
 
 const addUser = (req, res) => {
 
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     // check if emails is already exist
     pool.query(queries.checkEmailExists, [email], (error, results) => {
@@ -33,7 +33,7 @@ const addUser = (req, res) => {
         }
 
         // add student to database
-        pool.query(queries.addUser, [name, email, password], (error, results) => {
+        pool.query(queries.addUser, [username, email, password], (error, results) => {
             if (error) {
                 console.error("Error executing query", error.stack);
                 return res.status(500).send("Internal server error");
@@ -66,7 +66,7 @@ const deleteUser = (req, res) =>  {
 
 const updateUser = (req, res) => {
     const id = parseInt(req.params.id)
-    const { name } = req.body
+    const { username } = req.body
 
     pool.query(queries.getUserById, [id], (error, results) => {
         const noUserFound = !results.rows.length;
@@ -74,7 +74,7 @@ const updateUser = (req, res) => {
             res.send("Student does not exist in database");
         };
 
-        pool.query(queries.updateUser, [name, id], (error, results) => {
+        pool.query(queries.updateUser, [username, id], (error, results) => {
             if (error) {
                 console.error("Error executing query", error.stack);
                 return res.status(500).send("Internal server error");
@@ -85,7 +85,8 @@ const updateUser = (req, res) => {
         
 };
 
-module.exports = {
+
+export { 
     getUser,
     getUserById,
     addUser,
