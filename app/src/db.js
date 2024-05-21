@@ -1,6 +1,6 @@
-const Pool = require('pg').Pool;
+import pg from 'pg';
 
-const pool = new Pool({
+const pool = new pg.Pool({
     user: "postgres",
     host: "database",
     database: "calories-api",
@@ -8,4 +8,5 @@ const pool = new Pool({
     port: 5432
 });
 
-module.exports = pool;
+
+export { pool };

@@ -1,14 +1,15 @@
-const express = require('express')
-const apiRoutes = require('./src/routes')
+import { router } from './src/routes.js';
+import express from 'express';
+
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
     res.send("Hello Folks!")
 });
 
-app.use("/api", apiRoutes);
+app.use('/api', router);
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
