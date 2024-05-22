@@ -1,3 +1,6 @@
+import { pool } from './db.js';
+import * as queries from './queries.js';
+
 const addUser = (req, res) => {
 
     const { username, email, password } = req.body;
