@@ -1,44 +1,13 @@
-const { 
-    homepageHandler,
-    addBookHandler,
-    getAllBooksHandler,
-    getBookByIdHandler,
-    editBookByIdHandler,
-    deleteBookByIdHandler,
- } = require("./handler");
+import * as handler from './handler.js';
+import { Router } from 'express';
 
-const routes = [
-    {
-        method: 'GET',
-        path: '/',
-        handler: homepageHandler,
-    },
-    {
-        method: 'POST',
-        path: '/books',
-        handler: addBookHandler,
-    },
-    {
-        method: 'GET',
-        path: '/books',
-        handler: getAllBooksHandler, 
-    },
-    {
-        method: 'GET',
-        path: '/books/{id}',
-        handler: getBookByIdHandler,
-    },
-    {
-        method: 'PUT',
-        path: '/books/{id}',
-        handler: editBookByIdHandler,
-    },
-    {
-        method: 'DELETE',
-        path: '/books/{id}',
-        handler: deleteBookByIdHandler,
-    }
+const router = Router();
 
-];
+router.get("/", handler.getUser);
+router.post("/", handler.addUser);
+router.get("/:id", handler.getUserById);
+router.put("/:id", handler.updateUser)
+router.delete("/:id", handler.deleteUser);
 
-module.exports = routes;
+
+export { router };

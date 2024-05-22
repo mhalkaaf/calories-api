@@ -9,7 +9,7 @@ RUN npm install
 
 COPY . /app
 
-EXPOSE 9000
+EXPOSE 3000
 
 ENTRYPOINT ["npm", "run"]
 CMD ["start"]
