@@ -1,5 +1,6 @@
 import * as handler from './handler.js';
 import * as loginHandler from './login.js';
+import * as signUpHandler from './signup.js'
 
 import { Router } from 'express';
 
@@ -14,6 +15,6 @@ router.get("/login", loginHandler.getUser);
 router.get("/login/:id", loginHandler.getUserById);
 
 // Sign Up
-
+router.post("/api/signup",signUpHandler.addUser);
 
 export { router };
