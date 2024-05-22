@@ -13,5 +13,7 @@ router.delete("/:id", handler.deleteUser);
 router.get("/login", loginHandler.getUser);
 router.get("/login/:id", loginHandler.getUserById);
 
+// Sign Up
+
 
 export { router };
