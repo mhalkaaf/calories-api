@@ -1,5 +1,0 @@
-# create docker volume before start docker compose
-docker volume create pgdata
-
-# Execute psql query 
-docker exec -it calories-api-database-1 psql -U postgres
