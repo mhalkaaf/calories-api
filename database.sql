@@ -1,5 +1,7 @@
 CREATE DATABASE jwttutorial;
 
+create extension if not exists "uuid-ossp";
+
 CREATE TABLE users(
     id uuid PRIMARY KEY DEFAULT
     uuid_generate_v4(),
