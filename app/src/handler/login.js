@@ -3,6 +3,7 @@ import { pool } from '../database/db.js';
 import { jwtGenerator } from '../jwt/jwtGenerator.js';
 import { validInfo } from '../middleware/validInfo.js';
 import { authorization } from '../middleware/authorization.js';
+import * as queries from '../database/queries.js'
 
 
 const login = (validInfo, async (req, res) => {
@@ -13,7 +14,7 @@ const login = (validInfo, async (req, res) => {
 
         // 2. check if the user doesnt exist (if not) throw error
 
-        const user = await pool.query("SELECT * FROM users where email = $1", [email]);
+        const user = await pool.query(queries.selectUser, [email]);
 
         if (user.rows.length === 0) {
             res.status(401).json("Password or email is incorrect");
