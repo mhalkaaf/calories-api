@@ -17,22 +17,23 @@ const login = (validInfo, async (req, res) => {
         const user = await pool.query(queries.selectUser, [email]);
 
         if (user.rows.length === 0) {
-            res.status(401).json("Password or email is incorrect");
+            return res.status(401).json("Invalid Credential");
         }
 
         // 3. check if incoming password is the same as database
 
         const validPassword = await bcrypt.compare(password, user.rows[0].password);
         if (!validPassword) {
-            return res.send(401).send
+            return res.status(401).json("Invalid Credential");
         } 
 
         // 4. give them jwt token
 
         const token = jwtGenerator(user.rows[0].user_id);
-        res.json({ token });
+        return res.json({ token });
         } catch (err) {
             console.error(err.message);
+            res.status(500).send("Server error");
         }
 });
 
