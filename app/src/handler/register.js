@@ -11,6 +11,10 @@ const register = (validInfo, async (req,res) => {
 
         const { name, email, password } = req.body;
 
+        if (!password) {
+            return res.status(400).send("Password is required");
+        }
+
         // 2. check if the user exist, then throw error
 
         const user = await pool.query(queries.selectUser, [email]);
@@ -22,6 +26,9 @@ const register = (validInfo, async (req,res) => {
 
         const saltRound = 10;
         const salt = await bcrypt.genSalt(saltRound);
+
+        console.log('Generated salt:', salt);
+
         const bcryptPassword = await bcrypt.hash(password, salt);
 
         // 4. enter the new user inside our database
@@ -38,6 +45,5 @@ const register = (validInfo, async (req,res) => {
         return res.status(500).send("Server error");
     }
 });
-
 
 export { register }

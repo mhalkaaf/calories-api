@@ -1,19 +1,25 @@
 import jwt from 'jsonwebtoken';
 import "dotenv/config.js";
 
-const authorization = async (req, res, next) => {
+const authorization = async (req, res) => {
     try {
         const jwtToken = req.header("token");
         if (!jwtToken) {
-            return res.status(403).json("Not Authorize");
+            return res.status(403).json({ message: "authorization denied" });
         }
 
-        const payload = jwt.verify(jwtToken, process.env.JWT_SECRET);
+        jwt.verify(jwtToken, process.env.JWT_SECRET, (err, payload) => {
+            if (err) {
+                return res.status(403).json({ message: "Not Authorized" });
+            }
 
-        req.user = payload;
+            res.json(true)// = payload.user;
+            // next();
+        });
+        
     } catch (err) {
         console.error(err.message);
-        return res.status(403).json("Not Authorized")
+        return res.status(401).json({ msg: "Token is not valid" });
     }
 }
 
