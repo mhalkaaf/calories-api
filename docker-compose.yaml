@@ -4,6 +4,7 @@ services:
   api:
     build:
       context: ./app
+      dockerfile: Dockerfile.prod
     ports:
       - "3000:3000"
 
