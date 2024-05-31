@@ -20,20 +20,23 @@ const predict = async (req, res) => {
 
         // Preprocess the image to fit the model input requirements
         const resizedImage = tf.image.resizeBilinear(imageTensor, [128, 128]); // Example resize
-        const inputTensor = resizedImage.expandDims(0); // Example normalization
+        const normalizedImage = resizedImage.div(255.0); // Normalize pixel values
+        const inputTensor = normalizedImage.expandDims(0); // Add batch dimension
 
         // Make prediction
         const predictions = model.predict(inputTensor);
-        
+
         // const probabilities = predictions.arraySync();
         const probabilities = predictions.arraySync()[0];
-        console.log(probabilities);
+        predictions.dispose(); // Dispose of the prediction tensor to free up resources
+        console.log('Probabilities:', probabilities);
 
         // Determine the predicted fruit class
         const foodClasses = ['Apple', 'Banana', 'Fried_Chicken', 'Beef_Rendang', 'Egg', 'Doughnut'];
         const predictedClassIndex = probabilities.indexOf(Math.max(...probabilities));
         console.log(predictedClassIndex);
         const predictedFood = foodClasses[predictedClassIndex];
+        console.log('Predicted food:', predictedFood);
 
         // return predictedFruit;
 
