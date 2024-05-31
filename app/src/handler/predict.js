@@ -16,7 +16,8 @@ const predict = async (req, res) => {
         // Load the uploaded image
         const filePath = path.resolve(req.file.path);
         const imageBuffer = fs.readFileSync(filePath);
-        const imageTensor = tf.node.decodeImage(imageBuffer);
+        // const imageTensor = tf.node.decodeImage(imageBuffer);
+        let imageTensor = tf.node.decodeImage(imageBuffer, 3); // Decode image as RGB
 
         // Preprocess the image to fit the model input requirements
         const resizedImage = tf.image.resizeBilinear(imageTensor, [128, 128]); // Example resize
