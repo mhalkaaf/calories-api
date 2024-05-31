@@ -19,8 +19,8 @@ const predict = async (req, res) => {
         const imageTensor = tf.node.decodeImage(imageBuffer);
 
         // Preprocess the image to fit the model input requirements
-        const resizedImage = tf.image.resizeBilinear(imageTensor, [224, 224]); // Example resize
-        const inputTensor = resizedImage.expandDims(0).div(255.0); // Example normalization
+        const resizedImage = tf.image.resizeBilinear(imageTensor, [128, 128]); // Example resize
+        const inputTensor = resizedImage.expandDims(0); // Example normalization
 
         // Make prediction
         const predictions = model.predict(inputTensor);
