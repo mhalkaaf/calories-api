@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs-node';
 import * as path from 'path';
 import fs from 'fs';
-import { loadModel } from '../middleware/loadModel';
+import { loadModel } from '../middleware/loadModel.js';
 
 const predict = async (req, res) => {
     // Check if the file uploaded exists
