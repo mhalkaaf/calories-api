@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { login, verify } from '../handler/login.js';
 import { register } from '../handler/register.js';
 import { loadModel } from '../handler/loadmodel.js';
+import { predict } from '../handler/predict.js';
 
 const router = Router();
 
@@ -14,5 +15,8 @@ router.post("/register", register);
 
 // Load model
 router.post("/load", loadModel);
+
+// Predict model
+router.post("/predict", predict);
 
 export { router };
