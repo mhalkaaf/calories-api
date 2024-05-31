@@ -4,10 +4,11 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
-RUN apk update && apk add \
+RUN apk update && apk add --update\
+    alpine-sdk \
     wget \
     curl \
-    build-essential \
+    # build-essential \
     libc6-compat
 
 COPY package.json package-lock.json ./
