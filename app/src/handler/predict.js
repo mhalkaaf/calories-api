@@ -1,30 +1,20 @@
 import * as tf from '@tensorflow/tfjs-node';
 import * as path from 'path';
-import multer from "multer";
 import fs from 'fs';
-import exp from 'constants';
+import { loadModel } from '../middleware/loadModel';
 
-// Configure multer for file upload
-const upload = multer({ dest: 'uploads/' });
-
-// Load TensorFlow.js model
-let model;
-const loadModel = async () => {
-    model = await tf.loadLayersModel('file://../../../models/tfjs_models/model.json');
-    console.log('Model loaded');
-};
-
-loadModel();
-
-const predict = (upload.single('file'), async (req, res) => {
-    // Check if the file uploaded exist
+const predict = async (req, res) => {
+    // Check if the file uploaded exists
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
     }
 
     try {
+        // Load the model
+        const model = await loadModel();
+
         // Load the uploaded image
-        const filePath = path.join(__dirname, req.file.path);
+        const filePath = path.resolve(req.file.path);
         const imageBuffer = fs.readFileSync(filePath);
         const imageTensor = tf.node.decodeImage(imageBuffer);
 
@@ -44,7 +34,6 @@ const predict = (upload.single('file'), async (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Error processing the image' });
     }
-});
+};
 
-
-export { predict }
+export { predict };
