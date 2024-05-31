@@ -24,6 +24,7 @@ const predict = async (req, res) => {
 
         // Make prediction
         const predictions = model.predict(inputTensor);
+        
         // const probabilities = predictions.arraySync();
         const probabilities = predictions.arraySync()[0];
         console.log(probabilities);
