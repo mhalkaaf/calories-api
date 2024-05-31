@@ -28,9 +28,9 @@ const predict = async (req, res) => {
         const probabilities = predictions.arraySync()[0];
 
         // Determine the predicted fruit class
-        const fruitClasses = ['Apple', 'Banana', 'Fried_Chicken', 'Beef_Rendang', 'Egg', 'Doughnut'];
+        const foodClasses = ['Apple', 'Banana', 'Fried_Chicken', 'Beef_Rendang', 'Egg', 'Doughnut'];
         const predictedClassIndex = probabilities.indexOf(Math.max(...probabilities));
-        const predictedFruit = fruitClasses[predictedClassIndex];
+        const predictedFood = foodClasses[predictedClassIndex];
 
         // return predictedFruit;
 
@@ -38,11 +38,11 @@ const predict = async (req, res) => {
         fs.unlinkSync(filePath);
 
         // res.json({ predictions: probabilities });
-        res.json({ predictedFruit });
+        res.json({ predictedFood });
     } catch (err) {
         // console.error(err);
         // res.status(500).json({ error: 'Error processing the image' });
-        console.error('Error classifying fruit:', err);
+        console.error('Error classifying food:', err);
         res.status(500).json({ error: 'Error processing the image' });
     }
 };
