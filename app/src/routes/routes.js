@@ -18,6 +18,6 @@ router.post("/register", register);
 // router.post("/load", loadModel);
 
 // Predict model
-router.post("/predict", upload.single('file'), predict);
+router.post("/predict", upload, predict);
 
 export { router };
