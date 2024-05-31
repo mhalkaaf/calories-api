@@ -24,15 +24,24 @@ const predict = async (req, res) => {
 
         // Make prediction
         const predictions = model.predict(inputTensor);
-        const result = predictions.arraySync();
+        const probabilities = predictions.arraySync()[0];
+
+        // Determine the predicted fruit class
+        const fruitClasses = ['Apple', 'Banana', 'Fried_Chicken', 'Beef_Rendang', 'Egg', 'Doughnut'];
+        const predictedClassIndex = probabilities.indexOf(Math.max(...probabilities));
+        const predictedFruit = fruitClasses[predictedClassIndex];
+
+        return predictedFruit;
 
         // Clean up the uploaded file
-        fs.unlinkSync(filePath);
+        // fs.unlinkSync(filePath);
 
-        res.json({ predictions: result });
+        // res.json({ predictions: result });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Error processing the image' });
+        // console.error(err);
+        // res.status(500).json({ error: 'Error processing the image' });
+        console.error('Error classifying fruit:', err);
+        return 'unknown';
     }
 };
 
