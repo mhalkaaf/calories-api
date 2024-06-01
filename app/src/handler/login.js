@@ -1,8 +1,9 @@
+import jwt from 'jsonwebtoken';
+import "dotenv/config.js";
 import bcrypt from 'bcrypt';
 import { pool } from '../database/db.js';
 import { jwtGenerator } from '../jwt/jwtGenerator.js';
 import { validInfo } from '../middleware/validInfo.js';
-import { authorization } from '../middleware/authorization.js';
 import * as queries from '../database/queries.js'
 
 
@@ -37,12 +38,20 @@ const login = (validInfo, async (req, res) => {
         }
 });
 
-const verify = (authorization, async (req, res) => {
+const verify = (async (req, res, next) => {
+
+    const jwtToken = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Assuming JWT token is passed in Authorization header
+    if (!jwtToken) {
+        return res.status(401).send('Authorization token is missing');
+    }
+
     try {
-        res.json(true);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Server Error");
+        const decodedToken = jwt.verify(jwtToken, process.env.JWT_SECRET);
+        req.user = decodedToken; // Assign decoded token to req.user
+        res.status(200).json({ message: "Token is Valid" });
+        next(); // Call next to move to the next middleware or route handler
+    } catch (error) {
+        return res.status(401).json({ message: "Authorization token is invalid" });
     }
 });
 

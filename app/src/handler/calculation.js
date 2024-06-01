@@ -14,7 +14,13 @@ const caloriesData = (async (req, res) => {
             return res.status(401).send('Authorization token is missing');
         }
 
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Verify and decode JWT token
+        let decodedToken;
+        try {
+            decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Verify and decode JWT token
+        } catch (error) {
+            return res.status(401).send('Invalid authorization token');
+        }
+
         const user_id = decodedToken.user_id;
 
         if (!user_id) {
