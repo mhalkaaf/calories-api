@@ -23,6 +23,7 @@ CREATE TABLE users (
 CREATE TABLE calories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id),
+    title VARCHAR(30) NOT NULL,
     meals VARCHAR(30) NOT NULL,
     calories INT NOT NULL,
     date DATE DEFAULT CURRENT_DATE,

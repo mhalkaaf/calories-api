@@ -29,7 +29,7 @@ const login = (validInfo, async (req, res) => {
 
         // 4. give them jwt token
 
-        const token = jwtGenerator(user.rows[0].user_id);
+        const token = jwtGenerator(user.rows[0].id);
         return res.json({ token });
         } catch (err) {
             console.error(err.message);
