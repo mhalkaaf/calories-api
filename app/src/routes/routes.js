@@ -4,6 +4,7 @@ import { register } from '../handler/register.js';
 import { caloriesData } from '../handler/calculation.js';
 import { getItems } from '../handler/dashboard.js';
 
+
 const router = Router();
 
 // Login
@@ -18,5 +19,6 @@ router.post("/items", caloriesData);
 
 // Get All Users data
 router.get("/dashboard", getItems);
+
 
 export { router };
