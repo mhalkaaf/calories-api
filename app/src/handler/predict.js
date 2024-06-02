@@ -33,7 +33,7 @@ const predict = async (req, res) => {
         console.log('Probabilities:', probabilities);
 
         // Determine the predicted fruit class
-        const foodClasses = ['Apple', 'Banana', 'Fried_Chicken', 'Beef_Rendang', 'Egg', 'Doughnut'];
+        const foodClasses = ['Apple', 'Banana', 'Beef_Rendang', 'Doughnut', 'Egg', 'Fried_Chicken'];
         const predictedClassIndex = probabilities.indexOf(Math.max(...probabilities));
         console.log(predictedClassIndex);
         const predictedFood = foodClasses[predictedClassIndex];
