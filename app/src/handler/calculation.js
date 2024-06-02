@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import "dotenv/config.js";
-import { insertCaloriesData } from '../database/queries.js'
 import { pool } from '../database/db.js'
+import { insertCaloriesData } from '../database/queries.js'
 
 
 const caloriesData = (async (req, res) => {
