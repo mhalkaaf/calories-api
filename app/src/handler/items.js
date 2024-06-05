@@ -37,7 +37,8 @@ const addNewItem = (async (req,res) => {
         await client.query('COMMIT');
         client.release();
 
-        res.status(201).json({ message: 'Meals saved successfully', newItem });
+        res.status(201).json({ message: 'Meals saved successfully', 
+                               Item: newItem.rows });
 
     } catch (error) {
         console.error('Error inserting data', err);
