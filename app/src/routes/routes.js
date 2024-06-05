@@ -3,7 +3,7 @@ import { login, verify } from '../handler/login.js';
 import { register } from '../handler/register.js';
 import { caloriesData } from '../handler/calculation.js';
 import { getItems } from '../handler/dashboard.js';
-import { addNewItem } from '../handler/items.js';
+import { addNewItem, getNewItem } from '../handler/items.js';
 
 
 const router = Router();
@@ -21,7 +21,9 @@ router.post("/register", register);
 // Get All Users data
 // router.get("/dashboard", getItems);
 
-router.post("/items", addNewItem)
+router.post("/items", addNewItem);
+
+router.get("/items", getNewItem);
 
 
 export { router };

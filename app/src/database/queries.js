@@ -17,6 +17,8 @@ const getSummaryData = "SELECT DATE(created_at) as date, SUM(calories) as total_
 
 const addItem = "INSERT INTO calories (user_id, meal, amount) VALUES ($1, $2, $3) RETURNING *";
 
+const getItem = "SELECT meal, amount FROM calories WHERE user_id = $1";
+
 
 export {
     selectUser,
@@ -25,5 +27,6 @@ export {
     getCaloriesData,
     getDailyCaloriesData,
     getSummaryData,
-    addItem
+    addItem,
+    getItem
 };
