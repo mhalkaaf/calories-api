@@ -15,6 +15,7 @@ const getDailyCaloriesData = "SELECT DATE(created_at) as date, SUM(calories) as 
 
 const getSummaryData = "SELECT DATE(created_at) as date, SUM(calories) as total_calories, json_agg(json_build_object('meals', meals, 'calories', calories)) as daily_meals FROM calories WHERE user_id = $1 GROUP BY DATE(created_at) ORDER BY DATE(created_at) DESC";
 
+const addItem = "INSERT INTO calories (user_id, meal, amount) VALUES ($1, $2, $3) RETURNING *";
 
 
 export {
@@ -23,5 +24,6 @@ export {
     insertCaloriesData,
     getCaloriesData,
     getDailyCaloriesData,
-    getSummaryData
+    getSummaryData,
+    addItem
 };
