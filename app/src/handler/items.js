@@ -37,10 +37,9 @@ const addNewItem = (async (req,res) => {
         await client.query('COMMIT');
         client.release();
 
-        res.status(201).json({ message: 'Meals saved successfully', 
-                               Item: newItem.rows });
+        res.status(201).json({ message: 'Meals saved successfully', Item: newItem.rows });
 
-    } catch (error) {
+    } catch (err) {
         console.error('Error inserting data', err);
         res.status(500).send('Internal Server Error');
     }
@@ -79,10 +78,9 @@ const getNewItem = (async (req,res) => {
         await client.query('COMMIT');
         client.release();
 
-        res.status(201).json({ message: 'Meals saved successfully', 
-                               Item: getItems.rows });
+        res.status(201).json({ message: 'Meals saved successfully', Item: getItems.rows });
 
-    } catch (error) {
+    } catch (err) {
         console.error('Error inserting data', err);
         res.status(500).send('Internal Server Error');
     }
