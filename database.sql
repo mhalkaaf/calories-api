@@ -11,12 +11,26 @@ CREATE TABLE users(
 
 INSERT INTO users (name, email, password) VALUES ('haeckal', 'haeckal@gmail.com', 'haikal123');
 
+ALTER TABLE users ALTER COLUMN name TYPE varchar(255);
+ALTER TABLE users ALTER COLUMN email TYPE varchar(255);
+ALTER TABLE users ALTER COLUMN password TYPE varchar(255);
+
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(255) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(30) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+);
+
+CREATE TABLE calories (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id),
+    meal VARCHAR(255) NOT NULL,
+    amount INT NOT NULL,
+    date DATE DEFAULT CURRENT_DATE,
+    created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -43,6 +57,10 @@ CREATE TRIGGER update_calories_updated_at
 BEFORE UPDATE ON calories
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
+
+SELECT meal, amount FROM calories WHERE user_id = $1 AND date = $2;
+
+SELECT meal, amount FROM calories WHERE user_id = $1
 
 -- show calculation data on dashboard
 SELECT title, meals, calories 
