@@ -19,6 +19,10 @@ const addItem = "INSERT INTO calories (user_id, meal, amount) VALUES ($1, $2, $3
 
 const getItem = "SELECT meal, amount FROM calories WHERE user_id = $1";
 
+const updateItem = "UPDATE calories SET meal = $1, amount = $2 WHERE user_id = $3 AND id = $4 RETURNING *;"
+
+const deleteItem = "DELETE FROM calories WHERE user_id = $1 AND id = $2 RETURNING *";
+
 
 export {
     selectUser,
@@ -28,5 +32,7 @@ export {
     getDailyCaloriesData,
     getSummaryData,
     addItem,
-    getItem
+    getItem,
+    updateItem,
+    deleteItem
 };
