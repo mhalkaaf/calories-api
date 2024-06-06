@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { login, verify } from '../handler/login.js';
 import { register } from '../handler/register.js';
-import { caloriesData } from '../handler/calculation.js';
-import { getItems } from '../handler/dashboard.js';
 import { addNewItem, getNewItem } from '../handler/items.js';
+// import { caloriesData } from '../handler/calculation.js';
+// import { getItems } from '../handler/dashboard.js';
 
 
 const router = Router();

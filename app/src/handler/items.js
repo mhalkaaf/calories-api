@@ -78,10 +78,10 @@ const getNewItem = (async (req,res) => {
         await client.query('COMMIT');
         client.release();
 
-        res.status(201).json({ message: 'Meals saved successfully', Item: getItems.rows });
+        res.status(200).json({ message: 'Meals retrieved successfully', Item: getItems.rows });
 
     } catch (err) {
-        console.error('Error inserting data', err);
+        console.error('Error retrieving data', err);
         res.status(500).send('Internal Server Error');
     }
     
