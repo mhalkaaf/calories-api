@@ -4,13 +4,6 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
-# RUN apk update && apk add --update\
-#     alpine-sdk \
-#     wget \
-#     curl \
-#     # build-essential \
-#     libc6-compat
-
 COPY package.json package-lock.json ./
 
 RUN npm install
@@ -20,4 +13,4 @@ COPY . /app
 EXPOSE 3000
 
 ENTRYPOINT ["npm", "run"]
-CMD ["start"]
+CMD ["start:staging"]

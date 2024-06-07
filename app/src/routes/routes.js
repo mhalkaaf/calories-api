@@ -3,7 +3,7 @@ import { login, verify, logout } from '../handler/login.js';
 import { register } from '../handler/register.js';
 import { predict } from '../handler/predict.js';
 import { upload } from '../middleware/upload.js';
-import { addNewItem, getNewItem, updateNewItem, deleteNewItem } from '../handler/items-new.js';
+import { addNewItem, getNewItem, updateNewItem, deleteNewItem } from '../handler/items.js';
 
 
 const router = Router();

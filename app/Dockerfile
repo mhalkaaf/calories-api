@@ -1,6 +1,7 @@
 FROM node:18-slim
 
 RUN mkdir -p /app
+
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -12,4 +13,4 @@ COPY . /app
 EXPOSE 3000
 
 ENTRYPOINT ["npm", "run"]
-CMD ["start-run"]
+CMD ["start"]

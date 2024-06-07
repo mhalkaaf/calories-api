@@ -1,29 +1,12 @@
-import jwt from 'jsonwebtoken';
-import "dotenv/config.js";
 import { pool } from '../database/db.js';
 import { addItem, getItem, updateItem, deleteItem } from '../database/queries.js';
 
-
-const addNewItem = (async (req,res) => {
-
-    // Extract userId from JWT token in request header
-    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Assuming JWT token is passed in Authorization header
-    if (!token) {
-        return res.status(401).send('Authorization token is missing');
+const addNewItem = async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).send('Not authenticated');
     }
 
-    let decodedToken;
-    try {
-        decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Verify and decode JWT token
-    } catch (error) {
-        return res.status(401).send('Invalid authorization token');
-    }
-
-    const user_id = decodedToken.user_id;
-
-    if (!user_id) {
-        return res.status(401).send('Invalid token, user_id not found');
-    }
+    const user_id = req.session.userId;
 
     try {
         const { meal, amount } = req.body;
@@ -43,32 +26,16 @@ const addNewItem = (async (req,res) => {
         console.error('Error inserting data', err);
         res.status(500).send('Internal Server Error');
     }
-    
-});
+};
 
-const getNewItem = (async (req,res) => {
-
-    // Extract userId from JWT token in request header
-    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Assuming JWT token is passed in Authorization header
-    if (!token) {
-        return res.status(401).send('Authorization token is missing');
+const getNewItem = async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).send('Not authenticated');
     }
 
-    let decodedToken;
-    try {
-        decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Verify and decode JWT token
-    } catch (error) {
-        return res.status(401).send('Invalid authorization token');
-    }
-
-    const user_id = decodedToken.user_id;
-
-    if (!user_id) {
-        return res.status(401).send('Invalid token, user_id not found');
-    }
+    const user_id = req.session.userId;
 
     try {
-
         const client = await pool.connect();
 
         await client.query('BEGIN');
@@ -84,32 +51,16 @@ const getNewItem = (async (req,res) => {
         console.error('Error retrieving data', err);
         res.status(500).send('Internal Server Error');
     }
-    
-});
+};
 
 const updateNewItem = async (req, res) => {
-
-    // Extract userId from JWT token in request header
-    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Assuming JWT token is passed in Authorization header
-    if (!token) {
-        return res.status(401).send('Authorization token is missing');
+    if (!req.session.userId) {
+        return res.status(401).send('Not authenticated');
     }
 
-    let decodedToken;
-    try {
-        decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Verify and decode JWT token
-    } catch (error) {
-        return res.status(401).send('Invalid authorization token');
-    }
-
-    const user_id = decodedToken.user_id;
-
-    if (!user_id) {
-        return res.status(401).send('Invalid token, user_id not found');
-    }
+    const user_id = req.session.userId;
 
     try {
-
         const { id, meal, amount } = req.body;
 
         const client = await pool.connect();
@@ -134,28 +85,13 @@ const updateNewItem = async (req, res) => {
 };
 
 const deleteNewItem = async (req, res) => {
-
-    // Extract userId from JWT token in request header
-    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Assuming JWT token is passed in Authorization header
-    if (!token) {
-        return res.status(401).send('Authorization token is missing');
+    if (!req.session.userId) {
+        return res.status(401).send('Not authenticated');
     }
 
-    let decodedToken;
-    try {
-        decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Verify and decode JWT token
-    } catch (error) {
-        return res.status(401).send('Invalid authorization token');
-    }
-
-    const user_id = decodedToken.user_id;
-
-    if (!user_id) {
-        return res.status(401).send('Invalid token, user_id not found');
-    }
+    const user_id = req.session.userId;
 
     try {
-        
         const { id } = req.body;
 
         const client = await pool.connect();
@@ -179,5 +115,4 @@ const deleteNewItem = async (req, res) => {
     }
 };
 
-
-export { addNewItem, getNewItem, updateNewItem, deleteNewItem }
+export { addNewItem, getNewItem, updateNewItem, deleteNewItem };
