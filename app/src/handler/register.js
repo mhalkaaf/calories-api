@@ -12,7 +12,7 @@ const register = (validInfo, async (req,res) => {
         const { name, email, password } = req.body;
 
         if (!password) {
-            return res.status(400).send("Password is required");
+            return res.status(401).json({ status: 'error', message: 'Password is required!' });
         }
 
         // 2. check if the user exist, then throw error
@@ -20,7 +20,7 @@ const register = (validInfo, async (req,res) => {
         const user = await pool.query(selectUser, [email]);
 
         if (user.rows.length !== 0) {
-            return res.status(401).send("User already exist");
+            return res.status(401).json({ status: 'error', message: 'User already exist' });
         }
 
         const bcryptPassword = await bcrypt.hash(password, 10);
@@ -35,11 +35,13 @@ const register = (validInfo, async (req,res) => {
         req.session.userId = newUser.id;
         console.log(`Registered user ID: ${newUser.id}`);
 
-        res.status(201).json({ message: 'User registered successfully', user: newUser });
+        // res.status(201).json({ message: 'User registered successfully', user: newUser });
+        res.status(201).json({ status: 'success', message: 'User registered successfully', data: { user: newUser } });
 
     } catch (err) {
         console.error('Error registering user', err);
-        res.status(500).send('Internal Server Error');
+        // res.status(500).send('Internal Server Error');
+        res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
 });
 

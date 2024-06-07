@@ -24,13 +24,13 @@ const addNewItem = async (req, res) => {
 
     } catch (err) {
         console.error('Error inserting data', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ status: 'error', message: 'Internal server error!' });
     }
 };
 
 const getNewItem = async (req, res) => {
     if (!req.session.userId) {
-        return res.status(401).send('Not authenticated');
+        return res.status(401).json({ status: 'error', message: 'Not authenticated' });
     }
 
     const user_id = req.session.userId;
@@ -49,7 +49,7 @@ const getNewItem = async (req, res) => {
 
     } catch (err) {
         console.error('Error retrieving data', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ status: 'error', message: 'Internal server error!' });
     }
 };
 
@@ -73,20 +73,20 @@ const updateNewItem = async (req, res) => {
         client.release();
 
         if (updatedItem.rows.length === 0) {
-            return res.status(404).send('Meal not found or no change in data');
+            return res.status(404).json({ status: 'error', message: 'Meal not found or no change in data' });
         }
 
         res.status(200).json({ message: 'Meal updated successfully', Item: updatedItem.rows });
 
     } catch (err) {
         console.error('Error updating data', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ status: 'error', message: 'Internal server error!' });
     }
 };
 
 const deleteNewItem = async (req, res) => {
     if (!req.session.userId) {
-        return res.status(401).send('Not authenticated');
+        return res.status(401).json({ status: 'error', message: 'Not authenticated' });
     }
 
     const user_id = req.session.userId;
@@ -104,14 +104,14 @@ const deleteNewItem = async (req, res) => {
         client.release();
 
         if (deletedItem.rows.length === 0) {
-            return res.status(404).send('Meal not found or already deleted');
+            return res.status(404).json({ status: 'error', message: 'Meal not found or already deleted' });
         }
 
         res.status(200).json({ message: 'Meal deleted successfully', Item: deletedItem.rows });
 
     } catch (err) {
         console.error('Error deleting data', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ status: 'error', message: 'Internal server error!' });
     }
 };
 

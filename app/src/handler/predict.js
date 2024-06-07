@@ -45,12 +45,13 @@ const predict = async (req, res) => {
         fs.unlinkSync(filePath);
 
         // res.json({ predictions: probabilities });
-        res.json({ predictedFood });
+        // res.json({ predictedFood });
+        res.status(200).json({ result: predictedFood });
     } catch (err) {
         // console.error(err);
         // res.status(500).json({ error: 'Error processing the image' });
         console.error('Error classifying food:', err);
-        res.status(500).json({ error: 'Error processing the image' });
+        res.status(500).json({ status: 'error', message: 'Error processing the image' });
     }
 };
 
