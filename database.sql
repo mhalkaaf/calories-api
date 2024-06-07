@@ -58,6 +58,7 @@ BEFORE UPDATE ON calories
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
+
 SELECT meal, amount FROM calories WHERE user_id = $1 AND date = $2;
 
 SELECT meal, amount FROM calories WHERE user_id = $1

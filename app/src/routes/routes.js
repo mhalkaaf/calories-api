@@ -1,26 +1,25 @@
 import { Router } from 'express';
 import { login, verify, logout } from '../handler/login.js';
 import { register } from '../handler/register.js';
+import { predict } from '../handler/predict.js';
+import { upload } from '../middleware/upload.js';
 import { addNewItem, getNewItem, updateNewItem, deleteNewItem } from '../handler/items-new.js';
-// import { caloriesData } from '../handler/calculation.js';
-// import { getItems } from '../handler/dashboard.js';
 
 
 const router = Router();
 
 // Login
 router.post("/login", login);
-router.post("/login", logout);
+router.post("/logout", logout);
 router.get("/verify", verify);
 
 // Sign Up
 router.post("/register", register);
 
-// Calculations
-// router.post("/items", caloriesData);
+// Predict model
+router.post("/predict", upload, predict);
 
-// Get All Users data
-// router.get("/dashboard", getItems);
+// CRUD Operation Item
 
 router.post("/items", addNewItem);
 
