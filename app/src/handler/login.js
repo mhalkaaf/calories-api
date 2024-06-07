@@ -8,34 +8,46 @@ import * as queries from '../database/queries.js'
 
 
 const login = (validInfo, async (req, res) => {
+
+    const { email, password } = req.body;
+
     try {
-        // 1. destructure the req.body
+        const client = await pool.connect();
 
-        const { email, password } = req.body;
+        const userLogin = await client.query(queries.selectUser, [email]);
+        client.release();
 
-        // 2. check if the user doesnt exist (if not) throw error
-
-        const user = await pool.query(queries.selectUser, [email]);
-
-        if (user.rows.length === 0) {
-            return res.status(401).json("Invalid Credential");
+        if (userLogin.rows.length === 0) {
+            return res.status(401).send('Invalid username or password');
         }
 
-        // 3. check if incoming password is the same as database
+        const user = userLogin.rows[0];
 
-        const validPassword = await bcrypt.compare(password, user.rows[0].password);
-        if (!validPassword) {
-            return res.status(401).json("Invalid Credential");
-        } 
+        const match = await bcrypt.compare(password, user.password);
+            if (!match) {
+                return res.status(401).send('Invalid username or password');
+            }
+    
+        req.session.userId = user.id;
+        console.log(`Logged in user ID: ${user.id}`);
 
-        // 4. give them jwt token
+        res.status(200).send('Logged in successfully');
 
-        const token = jwtGenerator(user.rows[0].id);
-        return res.json({ token });
-        } catch (err) {
-            console.error(err.message);
-            res.status(500).send("Server error");
+    } catch (err) {
+        console.error('Error logging in', err);
+        res.status(500).send('Internal Server Error');
+    }
+
+});
+
+// Logout Route
+const logout = (async (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).send('Failed to logout');
         }
+        res.status(200).send('Logged out successfully');
+    })
 });
 
 const verify = (async (req, res, next) => {
@@ -56,4 +68,4 @@ const verify = (async (req, res, next) => {
 });
 
 
-export { login, verify }
+export { login, verify, logout }

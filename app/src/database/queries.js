@@ -15,6 +15,13 @@ const getDailyCaloriesData = "SELECT DATE(created_at) as date, SUM(calories) as 
 
 const getSummaryData = "SELECT DATE(created_at) as date, SUM(calories) as total_calories, json_agg(json_build_object('meals', meals, 'calories', calories)) as daily_meals FROM calories WHERE user_id = $1 GROUP BY DATE(created_at) ORDER BY DATE(created_at) DESC";
 
+const addItem = "INSERT INTO calories (user_id, meal, amount) VALUES ($1, $2, $3) RETURNING *";
+
+const getItem = "SELECT meal, amount FROM calories WHERE user_id = $1";
+
+const updateItem = "UPDATE calories SET meal = $1, amount = $2 WHERE user_id = $3 AND id = $4 RETURNING *;"
+
+const deleteItem = "DELETE FROM calories WHERE user_id = $1 AND id = $2 RETURNING *";
 
 
 export {
@@ -23,5 +30,9 @@ export {
     insertCaloriesData,
     getCaloriesData,
     getDailyCaloriesData,
-    getSummaryData
+    getSummaryData,
+    addItem,
+    getItem,
+    updateItem,
+    deleteItem
 };
