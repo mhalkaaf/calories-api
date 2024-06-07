@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { login, verify } from '../handler/login.js';
+import { login, verify, logout } from '../handler/login.js';
 import { register } from '../handler/register.js';
-import { addNewItem, getNewItem, updateNewItem, deleteNewItem } from '../handler/items.js';
+import { addNewItem, getNewItem, updateNewItem, deleteNewItem } from '../handler/items-new.js';
 // import { caloriesData } from '../handler/calculation.js';
 // import { getItems } from '../handler/dashboard.js';
 
@@ -10,6 +10,7 @@ const router = Router();
 
 // Login
 router.post("/login", login);
+router.post("/login", logout);
 router.get("/verify", verify);
 
 // Sign Up
