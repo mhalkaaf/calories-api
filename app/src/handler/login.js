@@ -1,55 +1,58 @@
+import jwt from 'jsonwebtoken';
 import "dotenv/config.js";
 import bcrypt from 'bcrypt';
 import { pool } from '../database/db.js';
+import { jwtGenerator } from '../jwt/jwtGenerator.js';
 import { validInfo } from '../middleware/validInfo.js';
 import { selectUser } from '../database/queries.js'
 
 
 const login = (validInfo, async (req, res) => {
-
-    const { email, password } = req.body;
-
     try {
-        const client = await pool.connect();
+        // 1. destructure the req.body
 
-        const userLogin = await client.query(selectUser, [email]);
-        client.release();
+        const { email, password } = req.body;
 
-        if (userLogin.rows.length === 0) {
-            return res.status(401).json({ status: 'error', message: 'Invalid user or password!' });
+        // 2. check if the user doesnt exist (if not) throw error
+
+        const user = await pool.query(selectUser, [email]);
+
+        if (user.rows.length === 0) {
+            return res.status(401).json({ status: 'error', message: 'Invalid Credential' });
         }
 
-        const user = userLogin.rows[0];
+        // 3. check if incoming password is the same as database
 
-        const match = await bcrypt.compare(password, user.password);
-            if (!match) {
-                return res.status(401).json({ status: 'error', message: 'Invalid user or password!' });
-            }
-    
-        req.session.userId = user.id;
-        console.log(`Logged in user ID: ${user.id}`);
+        const validPassword = await bcrypt.compare(password, user.rows[0].password);
+        if (!validPassword) {
+            res.status(401).json({ status: 'error', message: 'Invalid Credential' });
+        } 
 
-        // res.status(200).send('Logged in successfully');
-        res.status(200).json({ status: 'success', message: 'Logged in successfully' });
+        // 4. give them jwt token
 
-    } catch (err) {
-        console.error('Error logging in', err);
-        res.status(500).json({ status: 'error', message: 'Internal server error!' });
+        const token = jwtGenerator(user.rows[0].id);
+        return res.json({ token });
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).json({ status: 'error', message: 'Internal Server error' });
+        }
+});
+
+const verify = (async (req, res, next) => {
+
+    const jwtToken = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Assuming JWT token is passed in Authorization header
+    if (!jwtToken) {
+        return res.status(401).json({ status: 'error', message: 'Authorization token is missing' });
     }
 
+    try {
+        const decodedToken = jwt.verify(jwtToken, process.env.JWT_SECRET);
+        req.user = decodedToken; // Assign decoded token to req.user
+        res.status(200).json({ status: 'success', message: 'Token is Valid' });
+        next(); // Call next to move to the next middleware or route handler
+    } catch (error) {
+        res.status(401).json({ status: 'error', message: 'Authorization token is invalid' });
+    }
 });
 
-// Logout Route
-const logout = (async (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            // return res.status(500).send('Failed to logout');
-            return res.status(500).json({ status: 'error', message: 'Failed to logout' });
-        }
-        // res.status(200).send('Logged out successfully');
-        res.status(200).json({ status: 'success', message: 'Logged out successfully' });
-    })
-});
-
-
-export { login, logout }
+export { login, verify }

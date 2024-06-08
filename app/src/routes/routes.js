@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { login, logout } from '../handler/login.js';
+import { login, verify } from '../handler/login.js';
 import { register } from '../handler/register.js';
 import { predict } from '../handler/predict.js';
 import { upload } from '../middleware/upload.js';
@@ -10,7 +10,7 @@ const router = Router();
 
 // Login
 router.post("/login", login);
-router.post("/logout", logout);
+router.post("/verify", verify);
 
 // Sign Up
 router.post("/register", register);
