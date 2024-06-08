@@ -10,7 +10,7 @@ const router = Router();
 
 // Login
 router.post("/login", login);
-router.post("/verify", verify);
+router.get("/verify", verify);
 
 // Sign Up
 router.post("/register", register);
