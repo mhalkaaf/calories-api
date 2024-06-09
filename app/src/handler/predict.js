@@ -1,9 +1,31 @@
 import * as tf from '@tensorflow/tfjs-node';
 import * as path from 'path';
+import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import { loadModel } from '../middleware/loadModel.js';
+import "dotenv/config.js";
 
 const predict = async (req, res) => {
+
+    // Extract userId from JWT token in request header
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]; // Assuming JWT token is passed in Authorization header
+    if (!token) {
+        return res.status(401).json({ status: 'error', message: 'Authorization token is missing' });
+    }
+
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Verify and decode JWT token
+    } catch (error) {
+        return res.status(401).json({ status: 'error', message: 'Invalid authorization token' });
+    }
+
+    const user_id = decodedToken.user_id;
+
+    if (!user_id) {
+        return res.status(401).json({ status: 'error', message: 'Invalid token, user_id not found' });
+    }
+
     // Check if the file uploaded exists
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
@@ -65,6 +87,8 @@ const predict = async (req, res) => {
         }
 
         // return predictedFruit;
+        console.log(label);
+        console.log(information);
 
         // Clean up the uploaded file
         fs.unlinkSync(filePath);
