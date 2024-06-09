@@ -1,7 +1,9 @@
 import * as tf from '@tensorflow/tfjs-node';
 import * as path from 'path';
+import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import { loadModel } from '../middleware/loadModel.js';
+import "dotenv/config.js";
 
 const predict = async (req, res) => {
 
