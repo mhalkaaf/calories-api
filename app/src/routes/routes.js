@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { login, verify } from '../handler/login.js';
 import { register } from '../handler/register.js';
-import { caloriesData } from '../handler/calculation.js';
-import { getItems } from '../handler/dashboard.js';
+import { predict } from '../handler/predict.js';
+import { upload } from '../middleware/upload.js';
+import { addNewItem, getNewItem, updateNewItem, deleteNewItem } from '../handler/items.js';
 
 
 const router = Router();
@@ -14,11 +15,18 @@ router.get("/verify", verify);
 // Sign Up
 router.post("/register", register);
 
-// Calculations
-router.post("/items", caloriesData);
+// Predict model
+router.post("/predict", upload, predict);
 
-// Get All Users data
-router.get("/dashboard", getItems);
+// CRUD Operation Item
+
+router.post("/items", addNewItem);
+
+router.get("/items", getNewItem);
+
+router.put("/items", updateNewItem);
+
+router.delete("/items", deleteNewItem);
 
 
 export { router };
