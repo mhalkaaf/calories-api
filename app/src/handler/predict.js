@@ -58,7 +58,7 @@ const predict = async (req, res) => {
             information = "Telur mempunyai kandungan 155 kalori per 100 gram."
         } else if (predictedFood == "Fried_Chicken") {
             label = "Ayam Goreng";
-            information = "Telur mempunyai kandungan 260 kalori per 100 gram."
+            information = "Ayam Goreng mempunyai kandungan 260 kalori per 100 gram."
         } else {
             label = "Tidak Sesuai";
             information = "Mohon maaf, makanan yang anda input belum ada di database kami. Silahkan input makanan yang lain"
