@@ -39,6 +39,31 @@ const predict = async (req, res) => {
         const predictedFood = foodClasses[predictedClassIndex];
         console.log('Predicted food:', predictedFood);
 
+        let label, information;
+
+        if (predictedFood == "Apple") {
+            label = "Apel";
+            information = "Apel mempunyai kandungan 52 kalori per 100 gram."
+        } else if (predictedFood == "Banana") {
+            label = "Pisang";
+            information = "Pisang mempunyai kandungan 89 kalori per 100 gram."
+        } else if (predictedFood == "Beef_Rendang") {
+            label = "Rendang";
+            information = "Rendang mempunyai kandungan 193 kalori per 100 gram."
+        } else if (predictedFood == "Doughnut") {
+            label = "Donat";
+            information = "Donat mempunyai kandungan 421 kalori per 100 gram."
+        } else if (predictedFood == "Egg") {
+            label = "Telur";
+            information = "Telur mempunyai kandungan 155 kalori per 100 gram."
+        } else if (predictedFood == "Fried_Chicken") {
+            label = "Ayam Goreng";
+            information = "Ayam Goreng mempunyai kandungan 260 kalori per 100 gram."
+        } else {
+            label = "Tidak Sesuai";
+            information = "Mohon maaf, makanan yang anda input belum ada di database kami. Silahkan input makanan yang lain"
+        }
+
         // return predictedFruit;
 
         // Clean up the uploaded file
@@ -46,7 +71,7 @@ const predict = async (req, res) => {
 
         // res.json({ predictions: probabilities });
         // res.json({ predictedFood });
-        res.status(200).json({ result: predictedFood });
+        res.status(200).json({ label: label, information: information });
     } catch (err) {
         // console.error(err);
         // res.status(500).json({ error: 'Error processing the image' });
