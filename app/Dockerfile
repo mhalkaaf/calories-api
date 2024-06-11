@@ -1,6 +1,7 @@
-FROM node:18-alpine3.19
+FROM node:18-slim
 
 RUN mkdir -p /app
+
 WORKDIR /app
 
 COPY package.json package-lock.json ./
