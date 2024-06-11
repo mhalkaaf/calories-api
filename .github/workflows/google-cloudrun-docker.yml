@@ -45,7 +45,7 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build --file ./app/Dockerfile -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.COMMIT_SHORT_SHA }}" ./app
+          docker build --build-arg APPENV=${{ env.ENV_PRODUCTION }} --file ./app/Dockerfile -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.COMMIT_SHORT_SHA }}" ./app
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.COMMIT_SHORT_SHA }}"
 
       # END - Docker auth and build
