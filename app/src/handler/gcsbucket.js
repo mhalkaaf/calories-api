@@ -1,10 +1,10 @@
 import multer from "multer";
 import path from "path";
-import * as storage from '@google-cloud/storage';
+import { Storage } from '@google-cloud/storage';
 
 
 // Initialize Google Cloud Storage
-const gcsClient = new storage.Storage({
+const gcsClient = new Storage({
   keyFilename: path.join(__dirname, 'path-to-your-service-account-file.json'),
   projectId: 'haeckal-bangkit2024'
 });
