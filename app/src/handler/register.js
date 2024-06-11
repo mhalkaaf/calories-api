@@ -37,7 +37,7 @@ const register = (validInfo, async (req,res) => {
 
         // 5. generating our jwt token
 
-        const token = jwtGenerator(newUser.rows[0].user_id);
+        const token = jwtGenerator(newUser.rows[0].id);
 
         return res.status(201).json({ status: 'success', userToken: token });
     } catch (err) {
