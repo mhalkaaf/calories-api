@@ -1,11 +1,14 @@
 import multer from "multer";
 import path from "path";
 import { Storage } from '@google-cloud/storage';
+import "dotenv/config.js";
 
+
+dotenv.config();
 
 // Initialize Google Cloud Storage
 const gcsClient = new Storage({
-  keyFilename: path.join(__dirname, 'path-to-your-service-account-file.json'),
+  keyFilename: path.join(__dirname, process.env.GOOGLE_APPLICATION_CREDENTIALS),
   projectId: 'haeckal-bangkit2024'
 });
 const bucket = gcsClient.bucket('client-profile');
