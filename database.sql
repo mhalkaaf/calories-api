@@ -1,27 +1,18 @@
-CREATE DATABASE jwttutorial;
+CREATE DATABASE calories-api;
 
+-- create exrension for uuid
 create extension if not exists "uuid-ossp";
-
-CREATE TABLE users(
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
-);
-
-INSERT INTO users (name, email, password) VALUES ('haeckal', 'haeckal@gmail.com', 'haikal123');
-
-ALTER TABLE users ALTER COLUMN name TYPE varchar(255);
-ALTER TABLE users ALTER COLUMN email TYPE varchar(255);
-ALTER TABLE users ALTER COLUMN password TYPE varchar(255);
 
 CREATE TABLE users (
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(30) NOT NULL,
-    email VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 );
+
+INSERT INTO users (name, email, password) VALUES ('name', 'name@gmail.com', 'name123');
+
 
 CREATE TABLE calories (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -33,17 +24,7 @@ CREATE TABLE calories (
     updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
-CREATE TABLE calories (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID NOT NULL REFERENCES users(id),
-    title VARCHAR(30) NOT NULL,
-    meals VARCHAR(30) NOT NULL,
-    calories INT NOT NULL,
-    date DATE DEFAULT CURRENT_DATE,
-    created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- change schema of updated_at
 
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -58,7 +39,7 @@ BEFORE UPDATE ON calories
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
-
+-- get information of meal & amount
 SELECT meal, amount FROM calories WHERE user_id = $1 AND date = $2;
 
 SELECT meal, amount FROM calories WHERE user_id = $1
@@ -109,3 +90,8 @@ WITH (OIDS=FALSE);
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid");
 
 CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+
+-- change table users
+ALTER TABLE users ALTER COLUMN name TYPE varchar(255);
+ALTER TABLE users ALTER COLUMN email TYPE varchar(255);
+ALTER TABLE users ALTER COLUMN password TYPE varchar(255);
