@@ -3,6 +3,7 @@ import { login, verify } from '../handler/login.js';
 import { register } from '../handler/register.js';
 import { predict } from '../handler/predict.js';
 import { upload } from '../middleware/upload.js';
+import { gcsUpload } from '../handler/gcsbucket.js';
 import { addNewItem, getNewItem, updateNewItem, deleteNewItem } from '../handler/items.js';
 
 
@@ -27,6 +28,9 @@ router.get("/items", getNewItem);
 router.put("/items", updateNewItem);
 
 router.delete("/items", deleteNewItem);
+
+// Upload image to GCS for Profile
+router.post("/upload", gcsUpload);
 
 
 export { router };
