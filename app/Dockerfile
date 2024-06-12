@@ -4,13 +4,13 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
-# ARG APPENV
+ARG APPENV
 
 COPY package.json package-lock.json ./
 
 RUN npm install
 
-# RUN echo -e $APPENV > .env.production
+RUN echo -e $APPENV > .env.production
 
 COPY . /app
 

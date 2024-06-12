@@ -2,7 +2,7 @@ name: Build and Deploy to Cloud Run
 
 on:
   push:
-    branches: [ "feature/calculation" ]
+    branches: [ "master", "staging" ]
 
 env:
   PROJECT_ID: haeckal-bangkit2024 # TODO: update Google Cloud project id

@@ -64,26 +64,26 @@ const predict = async (req, res) => {
         let label, information;
 
         if (predictedFood == "Apple") {
-            label = "Apel";
-            information = "Apel mempunyai kandungan 52 kalori per 100 gram."
+            label = "Apple";
+            information = "Apples contain 52 calories per 100 grams."
         } else if (predictedFood == "Banana") {
-            label = "Pisang";
-            information = "Pisang mempunyai kandungan 89 kalori per 100 gram."
+            label = "Banana";
+            information = "Banana contain 89 calories per 100 grams."
         } else if (predictedFood == "Beef_Rendang") {
             label = "Rendang";
-            information = "Rendang mempunyai kandungan 193 kalori per 100 gram."
+            information = "Rendang contain 193 calories per 100 gram."
         } else if (predictedFood == "Doughnut") {
-            label = "Donat";
-            information = "Donat mempunyai kandungan 421 kalori per 100 gram."
+            label = "Doughnut";
+            information = "Doughnut contain 421 calories per 100 gram."
         } else if (predictedFood == "Egg") {
-            label = "Telur";
-            information = "Telur mempunyai kandungan 155 kalori per 100 gram."
+            label = "Egg";
+            information = "Egg contain 155 calories per 100 gram."
         } else if (predictedFood == "Fried_Chicken") {
-            label = "Ayam Goreng";
-            information = "Ayam Goreng mempunyai kandungan 260 kalori per 100 gram."
+            label = "Fried Chicken";
+            information = "Fried Chicken contain 260 calories per 100 gram."
         } else {
-            label = "Tidak Sesuai";
-            information = "Mohon maaf, makanan yang anda input belum ada di database kami. Silahkan input makanan yang lain"
+            label = "Wrong Input";
+            information = "Sorry, the food you inputed is not in our database. Please input another food."
         }
 
         // return predictedFruit;
