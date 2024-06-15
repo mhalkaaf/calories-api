@@ -1,7 +1,7 @@
 # H! Cal API 
 
 ## Short Description
-H! Cal API use several technologies including Nodejs, Express Framework, JWT for Authorization, and Mny More
+H! Cal API use several technologies including Nodejs, Express Framework, JWT for Authorization, and Many More
 
 ## How to use this API 
 There are several ways to Run This API :
